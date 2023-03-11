@@ -1,4 +1,4 @@
-name: Make Recovery
+name: Make Boot
 
 on:
   workflow_dispatch:
@@ -6,31 +6,31 @@ on:
       LIBRARY_NAME:
         description: 'LIBRARY_NAME'
         required: true
-        default: 'omni'
+        default: 'shrp'
       LIBRARY_URL:
         description: 'LIBRARY_URL'
         required: true
-        default: 'git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git'
+        default: 'git://github.com/SHRP/manifest.git'
       LIBRARY_BRANCH:
         description: 'LIBRARY_BRANCH'
         required: true
-        default: 'twrp-9.0'
+        default: 'shrp-12.1'
       DEVICE_URL:
         description: 'DEVICE_URL'
         required: true
-        default: 'https://github.com/azwhikaru/twrp_device_xiaomi_archytas'
+        default: 'https://github.com/sam9306/shrp_device_xiaomi_nabu'
       DEVICE_BRANCH:
         description: 'DEVICE_BRANCH'
         required: true
-        default: 'twrp-9.0'
+        default: 'twrp-12.1'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
-        default: 'device/xiaomi/Archytas'
+        default: 'device/xiaomi/nabu'
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
-        default: 'Archytas'
+        default: 'nabu'
 
 jobs:
   build:
@@ -97,7 +97,7 @@ jobs:
         source build/envsetup.sh
         lunch ${{ github.event.inputs.LIBRARY_NAME }}_${{ github.event.inputs.DEVICE_NAME }}-eng 
         make clean
-        make recoveryimage -j$(nproc --all)        
+        make bootimage -j$(nproc --all)        
     
     - name: Compressed file
       run: |
@@ -112,6 +112,6 @@ jobs:
         files: workspace/${{ github.event.inputs.DEVICE_NAME }}-Built.zip
         name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.run_id }}
         tag_name: ${{ github.run_id }}
-        body: Recovery for ${{ github.event.inputs.DEVICE_NAME }}
+        body: Boot for ${{ github.event.inputs.DEVICE_NAME }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
